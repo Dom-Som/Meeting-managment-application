@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "ReservationSystem.App/1.0.0": {
+        "dependencies": {
+          "ReservationSystem.Core": "1.0.0"
+        },
+        "runtime": {
+          "ReservationSystem.App.dll": {}
+        }
+      },
+      "ReservationSystem.Core/1.0.0": {
+        "runtime": {
+          "ReservationSystem.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ReservationSystem.App/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ReservationSystem.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

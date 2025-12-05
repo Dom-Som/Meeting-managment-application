@@ -1,0 +1,22 @@
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\bin\Debug\net8.0\ReservationSystem.Core.deps.json
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\bin\Debug\net8.0\ReservationSystem.Core.pdb
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.AssemblyInfoInputs.cache
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.AssemblyInfo.cs
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.csproj.CoreCompileInputs.cache
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.dll
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\obj\Debug\net8.0\refint\ReservationSystem.Core.dll
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.pdb
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\obj\Debug\net8.0\ref\ReservationSystem.Core.dll
+C:\Users\domci\Desktop\C# ND1\ReservationSystem.Core\bin\Debug\net8.0\ReservationSystem.Core.dll
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\bin\Debug\net8.0\ReservationSystem.Core.deps.json
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\bin\Debug\net8.0\ReservationSystem.Core.dll
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\bin\Debug\net8.0\ReservationSystem.Core.pdb
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.AssemblyInfoInputs.cache
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.AssemblyInfo.cs
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.csproj.CoreCompileInputs.cache
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.dll
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\refint\ReservationSystem.Core.dll
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.pdb
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ref\ReservationSystem.Core.dll
