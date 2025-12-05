@@ -8,20 +8,24 @@ namespace ReservationSystem.App
 {
     public static class Menu
     {
-        // Centrinis rezervacijų valdymo objektas
         private static readonly ReservationManager _manager = new();
 
-        // Failas, kuriame saugomi duomenys
         private const string FilePath = "reservations.txt";
 
-        // Įkrauna duomenis prieš paleidžiant meniu
         public static void LoadInitialData()
         {
             if (System.IO.File.Exists(FilePath))
                 _manager.LoadFromFile(FilePath);
+
+            // Prisiregistruojame prie įvykių
+            _manager.ReservationAdded += (s, r) =>
+                Console.WriteLine($"\n[EVENT] Pridėta rezervacija: {r.Title} ({r.Date:yyyy-MM-dd})");
+            _manager.ReservationDeleted += (s, r) =>
+                Console.WriteLine($"\n[EVENT] Ištrinta rezervacija: {r.Title} ({r.Date:yyyy-MM-dd})");
+            _manager.ReservationUpdated += (s, r) =>
+                Console.WriteLine($"\n[EVENT] Atnaujinta rezervacija: {r.Title} ({r.Date:yyyy-MM-dd})");
         }
 
-        // Pagrindinis meniu ciklas
         public static void Run()
         {
             while (true)
@@ -34,7 +38,7 @@ namespace ReservationSystem.App
                 Console.WriteLine("4. Filtruoti pagal statusą");
                 Console.WriteLine("5. Ištrinti");
                 Console.WriteLine("6. Išsaugoti į failą");
-                Console.WriteLine("7. Rasti rezervaciją pagal ID"); // <-- Nauja
+                Console.WriteLine("7. Rasti rezervaciją pagal ID");
                 Console.WriteLine("0. Išeiti");
                 Console.Write("\nPasirinkimas: ");
 
@@ -46,9 +50,8 @@ namespace ReservationSystem.App
                     case "4": FilterByStatus(); break;
                     case "5": DeleteReservation(); break;
                     case "6": SaveToFile(); break;
-                    case "7": FindReservation(); break;  // <-- Nauja
+                    case "7": FindReservation(); break;
                     case "0": return;
-
                     default:
                         Console.WriteLine("Neteisingas pasirinkimas.");
                         Pause();
@@ -57,7 +60,6 @@ namespace ReservationSystem.App
             }
         }
 
-        // Parodo visas rezervacijas
         private static void ShowAllReservations()
         {
             Console.Clear();
@@ -73,7 +75,6 @@ namespace ReservationSystem.App
             Pause();
         }
 
-        // Prideda naują rezervaciją
         private static void AddReservation()
         {
             Console.Clear();
@@ -88,23 +89,19 @@ namespace ReservationSystem.App
             Console.Write("Trukmė (val.): ");
             TimeSpan duration = double.TryParse(Console.ReadLine(), out var h) ? TimeSpan.FromHours(h) : TimeSpan.FromHours(1);
 
-            // Bitmask statusai
             Console.WriteLine("\nStatusai: 0=None, 1=Confirmed, 2=Paid, 4=Completed, 8=Cancelled");
             Console.Write("Įveskite reikšmę: ");
             int statusInput = int.TryParse(Console.ReadLine(), out var s) ? s : 0;
             ReservationStatus status = (ReservationStatus)statusInput;
 
-            // Automatinis ID
             int newId = _manager.GetAll().Any() ? _manager.GetAll().Max(r => r.Id) + 1 : 1;
 
             var newRes = new Reservation(newId, date, duration, title, status);
             _manager.Add(newRes);
 
-            Console.WriteLine("\nRezervacija pridėta!");
             Pause();
         }
 
-        // Filtravimas pagal datas su try/catch
         private static void FilterReservations()
         {
             Console.Clear();
@@ -134,7 +131,6 @@ namespace ReservationSystem.App
             Pause();
         }
 
-        // Filtravimas pagal statusą su try/catch
         private static void FilterByStatus()
         {
             Console.Clear();
@@ -150,7 +146,7 @@ namespace ReservationSystem.App
                 int input = int.TryParse(Console.ReadLine(), out var s) ? s : 0;
                 ReservationStatus selected = (ReservationStatus)input;
 
-                var results = _manager.Filter(r => (r.Status & selected) != 0).ToList();
+                var results = _manager.FilterByStatus(selected).ToList();
 
                 Console.Clear();
                 Console.WriteLine("=== Rezultatai ===\n");
@@ -170,7 +166,6 @@ namespace ReservationSystem.App
             Pause();
         }
 
-        // Ištrynimas su try/catch
         private static void DeleteReservation()
         {
             Console.Clear();
@@ -181,7 +176,7 @@ namespace ReservationSystem.App
                 if (int.TryParse(Console.ReadLine(), out int id))
                 {
                     bool ok = _manager.Delete(id);
-                    Console.WriteLine(ok ? "Ištrinta!" : "Tokio ID nėra.");
+                    if (!ok) Console.WriteLine("Tokio ID nėra.");
                 }
                 else
                 {
@@ -196,7 +191,6 @@ namespace ReservationSystem.App
             Pause();
         }
 
-        // Nauja – ieško rezervacijos pagal ID ir pagaudamas mūsų custom exception
         private static void FindReservation()
         {
             Console.Clear();
@@ -224,7 +218,6 @@ namespace ReservationSystem.App
             Pause();
         }
 
-        // Išsaugo viską į failą
         private static void SaveToFile()
         {
             _manager.SaveToFile(FilePath);
@@ -232,7 +225,6 @@ namespace ReservationSystem.App
             Pause();
         }
 
-        // Sustabdo ekraną
         private static void Pause()
         {
             Console.WriteLine("\nPaspauskite bet kurį mygtuką...");

@@ -20,3 +20,4 @@ C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj
 C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\refint\ReservationSystem.Core.dll
 C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.pdb
 C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ref\ReservationSystem.Core.dll
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\ReservationSystem.Core\obj\Debug\net8.0\ReservationSystem.Core.sourcelink.json

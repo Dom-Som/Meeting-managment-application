@@ -10,22 +10,45 @@ namespace ReservationSystem.Core.Services
 {
     /// <summary>
     /// Valdo rezervacijų kolekciją: pridėjimą, šalinimą, paiešką, filtravimą, failų operacijas.
-    /// Taip pat leidžia iteruoti per rezervacijas naudojant foreach (IEnumerable).
+    /// Taip pat leidžia iteruoti per rezervacijas naudojant foreach (IEnumerable)
+    /// ir iškelia įvykius, kai rezervacijos keičiasi.
     /// </summary>
     public class ReservationManager : IEnumerable<Reservation>
     {
         private readonly List<Reservation> _reservations = new();
         private readonly Dictionary<int, Reservation> _byId = new();
 
+        // -------------------------
+        // Įvykiai
+        // -------------------------
+        public event EventHandler<Reservation>? ReservationAdded;
+        public event EventHandler<Reservation>? ReservationDeleted;
+        public event EventHandler<Reservation>? ReservationUpdated;
+
+        // -------------------------
+        // CRUD metodai
+        // -------------------------
+
+        /// <summary>
+        /// Prideda vieną ar kelias rezervacijas.
+        /// Iškelia įvykį ReservationAdded.
+        /// </summary>
         public void Add(params Reservation[] items)
         {
             foreach (var r in items)
             {
                 if (_byId.ContainsKey(r.Id))
+                {
                     _reservations.Remove(_byId[r.Id]);
-
-                _reservations.Add(r);
-                _byId[r.Id] = r;
+                    _byId[r.Id] = r;
+                    ReservationUpdated?.Invoke(this, r); // atnaujinta rezervacija
+                }
+                else
+                {
+                    _reservations.Add(r);
+                    _byId[r.Id] = r;
+                    ReservationAdded?.Invoke(this, r); // nauja rezervacija
+                }
             }
         }
 
@@ -34,19 +57,13 @@ namespace ReservationSystem.Core.Services
         public IEnumerable<Reservation> Filter(Func<Reservation, bool> predicate)
             => _reservations.Where(predicate);
 
-        /// <summary>
-        /// Iteratorius, grąžinantis rezervacijas, kurių data patenka į intervalą.
-        /// </summary>
         public IEnumerable<Reservation> GetByDateRange(DateTime start, DateTime end)
         {
             foreach (var r in _reservations)
-            {
                 if (r.Date >= start && r.Date <= end)
                     yield return r;
-            }
         }
 
-        /// Suranda rezervaciją pagal jos ID.
         public Reservation FindOrThrow(int id)
         {
             if (_byId.TryGetValue(id, out var r))
@@ -55,13 +72,30 @@ namespace ReservationSystem.Core.Services
             throw new ReservationNotFoundException(id);
         }
 
-
         public bool Delete(int id)
         {
             if (_byId.TryGetValue(id, out var r))
             {
                 _byId.Remove(id);
                 _reservations.Remove(r);
+                ReservationDeleted?.Invoke(this, r); // iškeliame įvykį
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Atnaujina rezervaciją pagal ID.
+        /// Iškelia įvykį ReservationUpdated.
+        /// </summary>
+        public bool Update(Reservation updated)
+        {
+            if (_byId.ContainsKey(updated.Id))
+            {
+                _reservations.Remove(_byId[updated.Id]);
+                _reservations.Add(updated);
+                _byId[updated.Id] = updated;
+                ReservationUpdated?.Invoke(this, updated);
                 return true;
             }
             return false;
@@ -71,7 +105,6 @@ namespace ReservationSystem.Core.Services
         {
             var lines = _reservations.Select(r =>
                 $"{r.Id};{r.Date:yyyy-MM-dd};{r.Duration};{r.Title};{r.Status}");
-
             File.WriteAllLines(path, lines);
         }
 
@@ -95,50 +128,26 @@ namespace ReservationSystem.Core.Services
         public IEnumerable<Reservation> FilterByStatus(ReservationStatus status)
         {
             foreach (var r in _reservations)
-            {
                 if (r.Status.HasFlag(status))
                     yield return r;
-            }
         }
 
         // -------------------------
         // IEnumerable implementacija
         // -------------------------
-
-        /// <summary>
-        /// Grąžina rezervacijų enumeratorių foreach ciklams.
-        /// </summary>
-        public IEnumerator<Reservation> GetEnumerator()
-            => new ReservationEnumerator(_reservations);
-
-        IEnumerator IEnumerable.GetEnumerator()
-            => GetEnumerator();
-
-        // -------------------------
-        // Vidinis IEnumerator
-        // -------------------------
+        public IEnumerator<Reservation> GetEnumerator() => new ReservationEnumerator(_reservations);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private class ReservationEnumerator : IEnumerator<Reservation>
         {
             private readonly List<Reservation> _list;
             private int _index = -1;
 
-            public ReservationEnumerator(List<Reservation> list)
-            {
-                _list = list;
-            }
-
+            public ReservationEnumerator(List<Reservation> list) => _list = list;
             public Reservation Current => _list[_index];
             object IEnumerator.Current => Current;
-
-            public bool MoveNext()
-            {
-                _index++;
-                return _index < _list.Count;
-            }
-
+            public bool MoveNext() { _index++; return _index < _list.Count; }
             public void Reset() => _index = -1;
-
             public void Dispose() { }
         }
     }

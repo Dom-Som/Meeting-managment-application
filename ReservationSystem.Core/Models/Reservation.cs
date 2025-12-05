@@ -7,13 +7,14 @@ namespace ReservationSystem.Core.Models
     /// Konkreti rezervacijos klasė.
     /// Paveldi bendrus laukus iš BaseReservation
     /// ir papildomai implementuoja palyginimą, lygybę,
-    /// formatavimą bei priminimų generavimą.
+    /// formatavimą, priminimų generavimą ir klonavimą.
     /// </summary>
     public sealed class Reservation : BaseReservation,
         IComparable<Reservation>,
         IEquatable<Reservation>,
         IFormattable,
-        INotifiable
+        INotifiable,
+        ICloneable
     {
         /// <summary>
         /// Unikalus rezervacijos identifikatorius.
@@ -25,18 +26,8 @@ namespace ReservationSystem.Core.Models
         /// </summary>
         public ReservationStatus Status { get; set; }
 
-        /// <summary>
-        /// Statinis konstruktorius iškviečiamas vieną kartą,
-        /// kai tipas pirmą kartą naudojamas.
-        /// Šiuo atveju nenaudojamas, bet paliktas demonstracijai.
-        /// </summary>
-        static Reservation()
-        {
-        }
+        static Reservation() { }
 
-        /// <summary>
-        /// Pagrindinis rezervacijos konstruktorius.
-        /// </summary>
         public Reservation(int id, DateTime date, TimeSpan duration, string title = "Untitled",
             ReservationStatus status = ReservationStatus.None)
             : base(date, duration, title)
@@ -45,30 +36,18 @@ namespace ReservationSystem.Core.Models
             Status = status;
         }
 
-        /// <summary>
-        /// Konkrečios rezervacijos santrauka.
-        /// </summary>
         public override string GetSummary() =>
             $"{Title} ({Date:yyyy-MM-dd}) - {Status}";
 
         // -----------------------------
-        // IComparable implementacija
+        // IComparable
         // -----------------------------
-
-        /// <summary>
-        /// Lygina rezervacijas pagal datą.
-        /// </summary>
         public int CompareTo(Reservation? other) =>
             other == null ? 1 : Date.CompareTo(other.Date);
 
         // -----------------------------
-        // IEquatable implementacija
+        // IEquatable
         // -----------------------------
-
-        /// <summary>
-        /// Rezervacijos laikomos lygiomis,
-        /// jei jų ID sutampa.
-        /// </summary>
         public bool Equals(Reservation? other) =>
             other != null && Id == other.Id;
 
@@ -78,47 +57,39 @@ namespace ReservationSystem.Core.Models
         public override int GetHashCode() => Id.GetHashCode();
 
         // -----------------------------
-        // IFormattable implementacija
+        // IFormattable
         // -----------------------------
-
-        /// <summary>
-        /// Leidžia formatuoti rezervacijos tekstą
-        /// naudojant formatus: short, long, default.
-        /// </summary>
         public string ToString(string? format, IFormatProvider? provider)
         {
             return format?.ToLower() switch
             {
-                "short" =>
-                    $"{Title} ({Date:yyyy-MM-dd})",
-
-                "long" =>
-                    $"{Id}: {Title} ({Date:yyyy-MM-dd HH:mm}) Duration: {Duration} Status: {Status}",
-
-                _ =>
-                    $"{Title} ({Date:yyyy-MM-dd}) - {Status}"
+                "short" => $"{Title} ({Date:yyyy-MM-dd})",
+                "long" => $"{Id}: {Title} ({Date:yyyy-MM-dd HH:mm}) Duration: {Duration} Status: {Status}",
+                _ => $"{Title} ({Date:yyyy-MM-dd}) - {Status}"
             };
         }
 
         // -----------------------------
-        // INotifiable implementacija
+        // INotifiable
         // -----------------------------
-
-        /// <summary>
-        /// Generuoja tekstinį priminimą apie rezervaciją.
-        /// </summary>
         public string GenerateReminder() =>
             $"Primename apie rezervaciją '{Title}' {Date:yyyy-MM-dd}";
 
         // -----------------------------
+        // ICloneable implementacija
+        // -----------------------------
+        /// <summary>
+        /// Grąžina naują kopiją šios rezervacijos objekto.
+        /// </summary>
+        public object Clone()
+        {
+            // Seklus klonas pakanka, nes DateTime, TimeSpan ir enum yra immutable.
+            return new Reservation(Id, Date, Duration, Title, Status);
+        }
+
+        // -----------------------------
         // Operatoriai
         // -----------------------------
-
-        /// <summary>
-        /// Sudeda rezervacijų trukmes
-        /// ir sujungia jų statusus (bitų OR operacija).
-        /// Demonstracinis operatoriaus pavyzdys.
-        /// </summary>
         public static Reservation operator +(Reservation a, Reservation b) =>
             new(a.Id, a.Date, a.Duration + b.Duration, a.Title, a.Status | b.Status);
 

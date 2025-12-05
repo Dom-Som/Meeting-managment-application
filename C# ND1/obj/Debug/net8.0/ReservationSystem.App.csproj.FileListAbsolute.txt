@@ -34,3 +34,4 @@ C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\C# ND1\obj\Debug\net8.0\re
 C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\C# ND1\obj\Debug\net8.0\ReservationSystem.App.pdb
 C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\C# ND1\obj\Debug\net8.0\ReservationSystem.App.genruntimeconfig.cache
 C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\C# ND1\obj\Debug\net8.0\ref\ReservationSystem.App.dll
+C:\Users\domci\Desktop\Darbai\C# programavimas\C# ND2\C# ND1\obj\Debug\net8.0\ReservationSystem.App.sourcelink.json
